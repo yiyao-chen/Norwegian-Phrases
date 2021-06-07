@@ -26,6 +26,9 @@ interface PhraseDao {
     @Delete
     fun delete(phrase: Phrase)
 
+    @Query("DELETE FROM phrases")
+    fun deleteAll()
+
     @Delete
     fun deletePhrases(vararg phrases: Phrase)
 }
