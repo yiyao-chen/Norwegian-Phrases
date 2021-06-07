@@ -25,9 +25,9 @@ class HomeViewModel(application : Application) : AndroidViewModel(application) {
         CoroutineScope(Dispatchers.IO).launch {
 
             phraseDao.deleteAll()
-            var phrase = Phrase(2,"pppp s")
+            var phrase = Phrase(2,"pppp s", "exå: fdf")
             phraseDao.insert(phrase)
-            phrase = Phrase(0," dasakø pp s")
+            phrase = Phrase(0," dasakø pp s", "expl: das")
             phraseDao.insert(phrase)
         }
 

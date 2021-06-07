@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
 }
+apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
@@ -71,4 +72,9 @@ dependencies {
 
     // to use Coroutine features (Flow)
     implementation 'androidx.room:room-ktx:2.3.0'
+
+    // cardview
+    implementation 'androidx.cardview:cardview:1.0.0'
+    // recyclerview
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
 }

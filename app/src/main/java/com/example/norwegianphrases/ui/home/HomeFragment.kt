@@ -6,20 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.example.norwegianphrases.R
-import com.example.norwegianphrases.database.AppDatabase
-import com.example.norwegianphrases.database.PhraseDao
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.norwegianphrases.databinding.FragmentHomeBinding
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
-
+    private lateinit var mAdapter: PhraseAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -36,24 +32,42 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-
         homeViewModel.createDatabase()
+
+        return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mAdapter = PhraseAdapter()
+
+        recyclerView.apply {
+            // set a LinearLayoutManager to handle Android
+            // RecyclerView behavior
+            layoutManager = LinearLayoutManager(activity)
+            // set the custom adapter to the RecyclerView
+            adapter = mAdapter
+        }
+
+        val textView: TextView = binding.textHome
 
         // observe livedata in viewmodel and update adapter
         homeViewModel.getPhrases().observe(viewLifecycleOwner, { dataList->
             println("observe----")
             println("size----" + dataList.size)
 
+            var t = ""
             for(p in dataList) {
                 println(p.toString())
+                t = t + " ; "+ p.toString()
             }
-        })
+            textView.text = t
 
-        return root
+            mAdapter.updateAdapter(dataList)
+            println("notify..............")
+
+            mAdapter?.notifyDataSetChanged()
+        })
     }
 
     override fun onDestroyView() {
