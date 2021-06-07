@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "phrases")
 data class Phrase(
-    @PrimaryKey val pid: Int,
+    @PrimaryKey(autoGenerate = true) val pid: Int,
     @ColumnInfo(name = "phrase") val phrase: String?,
 )
