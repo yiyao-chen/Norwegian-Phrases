@@ -32,8 +32,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        homeViewModel.createDatabase()
-
+        homeViewModel.getDatabase()
+        homeViewModel.populateDatabase()
+        println("view created")
         return root
     }
 
@@ -49,7 +50,7 @@ class HomeFragment : Fragment() {
             adapter = mAdapter
         }
 
-        val textView: TextView = binding.textHome
+       // //val textView: TextView = binding.textHome
 
         // observe livedata in viewmodel and update adapter
         homeViewModel.getPhrases().observe(viewLifecycleOwner, { dataList->
@@ -58,15 +59,14 @@ class HomeFragment : Fragment() {
 
             var t = ""
             for(p in dataList) {
-                println(p.toString())
                 t = t + " ; "+ p.toString()
             }
-            textView.text = t
+            //textView.text = t
 
             mAdapter.updateAdapter(dataList)
             println("notify..............")
 
-            mAdapter?.notifyDataSetChanged()
+            mAdapter.notifyDataSetChanged()
         })
     }
 

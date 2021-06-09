@@ -9,6 +9,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+import kotlin.random.Random
+
 class HomeViewModel(application : Application) : AndroidViewModel(application) {
     lateinit var db: AppDatabase
     private lateinit var phraseDao: PhraseDao
@@ -19,16 +21,34 @@ class HomeViewModel(application : Application) : AndroidViewModel(application) {
     }
     val text: LiveData<String> = _text
 
-    fun createDatabase() {
+    fun getDatabase() {
         db = AppDatabase.getDatabase(getApplication())
         phraseDao = db.phraseDao()
-        CoroutineScope(Dispatchers.IO).launch {
+    }
 
+    fun populateDatabase() {
+        println("populate db")
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+/*
             phraseDao.deleteAll()
             var phrase = Phrase(2,"pppp s", "exå: fdf")
             phraseDao.insert(phrase)
             phrase = Phrase(0," dasakø pp s", "expl: das")
             phraseDao.insert(phrase)
+ */
+            phraseDao.deleteAll()
+            val lineList = mutableListOf<String>()
+            val file = "test.txt"
+            getApplication<Application>().assets.open(file).bufferedReader().forEachLine {
+                var array = it.split(";")
+                var name = array[0]
+                var explanation  = array[1]
+                var phrase = Phrase(Random.nextInt(0,10),name, explanation)
+                phraseDao.insert(phrase)
+            }
+
         }
 
         phrases = phraseDao.getAll().asLiveData()
