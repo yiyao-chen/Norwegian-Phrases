@@ -6,12 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
-import com.example.norwegianphrases.databinding.FragmentDashboardBinding
 import com.example.norwegianphrases.databinding.FragmentDetailBinding
-import com.example.norwegianphrases.ui.home.PhraseAdapter
+import com.example.norwegianphrases.ui.home.HomeViewModel
 
 class DetailFragment : Fragment(){
 
@@ -19,7 +16,7 @@ class DetailFragment : Fragment(){
         fun newInstance() = DetailFragment()
     }
 
-    private lateinit var viewModel: DetailViewModel
+    private lateinit var viewModel: HomeViewModel // shared viewmodel
     private var _binding: FragmentDetailBinding? = null
 
     // This property is only valid between onCreateView and
@@ -30,11 +27,23 @@ class DetailFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
 
-        return inflater.inflate(R.layout.fragment_detail, container, false)
+        //inflater.inflate(R.layout.fragment_detail, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        println("o v c")
+
+        viewModel.clickedPhraseLiveData().observe(viewLifecycleOwner, {
+            println("observe ")
+            setText(it)
+        })
+
     }
 
     override fun onDestroyView() {
@@ -42,6 +51,14 @@ class DetailFragment : Fragment(){
         _binding = null
     }
 
+    private fun setText(p : Phrase) {
+        println("set tetx")
+        _binding?.phraseName?.text = p.phrase
+        _binding?.phraseTranslation?.text = p.translation
+        _binding?.noExplanation?.text = p.no_explanation
+        _binding?.chExplanation?.text = p.ch_explanation
 
+
+    }
 
 }

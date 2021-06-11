@@ -9,10 +9,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-import kotlin.random.Random
-
 class HomeViewModel(application : Application) : AndroidViewModel(application) {
-    lateinit var db: AppDatabase
+    private lateinit var db: AppDatabase
+    private lateinit var phraseClicked: Phrase
+    private var phraseLive = MutableLiveData<Phrase>()
+
     private lateinit var phraseDao: PhraseDao
     lateinit var phrases: LiveData<List<Phrase>>
 
@@ -42,10 +43,10 @@ class HomeViewModel(application : Application) : AndroidViewModel(application) {
             val lineList = mutableListOf<String>()
             val file = "test.txt"
             getApplication<Application>().assets.open(file).bufferedReader().forEachLine {
-                var array = it.split(";")
-                var phrase = array[0]
-                var translation  = array[1]
-                var phraseObj = Phrase(phrase, translation, array[2], array[3])
+                val array = it.split(";")
+                val phrase = array[0]
+                val translation  = array[1]
+                val phraseObj = Phrase(phrase, translation, array[2], array[3])
                 phraseDao.insert(phraseObj)
                 println(phraseObj.toString())
             }
@@ -58,4 +59,16 @@ class HomeViewModel(application : Application) : AndroidViewModel(application) {
 
     @JvmName("getPhrases1")
     fun getPhrases() = phrases
+
+    fun setClickedPhrase(phrase: Phrase) {
+        phraseClicked = phrase
+        notifyLiveData(phrase)
+    }
+
+    private fun notifyLiveData(phrase: Phrase) {
+        phraseLive.value = phrase
+        println("notified : phrase = " + phrase.toString())
+    }
+
+    fun clickedPhraseLiveData() = phraseLive as LiveData<Phrase>
 }

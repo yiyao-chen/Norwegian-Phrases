@@ -31,7 +31,7 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
         savedInstanceState: Bundle?
     ): View? {
         homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -78,6 +78,7 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
     }
 
     override fun onItemClick(phraseClicked: Phrase) {
+        homeViewModel.setClickedPhrase(phraseClicked)
         findNavController().navigate(R.id.action_navigation_home_to_detailFragment)
     }
 }
