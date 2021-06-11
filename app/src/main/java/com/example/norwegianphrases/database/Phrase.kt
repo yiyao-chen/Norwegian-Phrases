@@ -6,7 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "phrases")
 data class Phrase(
-    @PrimaryKey(autoGenerate = true) val pid: Int,
     @ColumnInfo(name = "phrase") val phrase: String?,
-    @ColumnInfo(name = "explanation") val explanation: String?
+    @ColumnInfo(name = "translation") val translation: String?,
+    @ColumnInfo(name = "no_explanation") val no_explanation: String?,
+    @ColumnInfo(name = "ch_explanation") val ch_explanation: String?,
+    @PrimaryKey(autoGenerate = true) val pid: Int = 0
 )

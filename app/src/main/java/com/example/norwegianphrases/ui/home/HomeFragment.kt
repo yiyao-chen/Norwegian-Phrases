@@ -7,11 +7,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.norwegianphrases.R
+import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FragmentHomeBinding
 import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
+{
 
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
@@ -40,7 +44,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mAdapter = PhraseAdapter()
+        mAdapter = PhraseAdapter(this)
 
         recyclerView.apply {
             // set a LinearLayoutManager to handle Android
@@ -64,8 +68,6 @@ class HomeFragment : Fragment() {
             //textView.text = t
 
             mAdapter.updateAdapter(dataList)
-            println("notify..............")
-
             mAdapter.notifyDataSetChanged()
         })
     }
@@ -73,5 +75,9 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemClick(phraseClicked: Phrase) {
+        findNavController().navigate(R.id.action_navigation_home_to_detailFragment)
     }
 }

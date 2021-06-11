@@ -43,11 +43,13 @@ class HomeViewModel(application : Application) : AndroidViewModel(application) {
             val file = "test.txt"
             getApplication<Application>().assets.open(file).bufferedReader().forEachLine {
                 var array = it.split(";")
-                var name = array[0]
-                var explanation  = array[1]
-                var phrase = Phrase(Random.nextInt(0,10),name, explanation)
-                phraseDao.insert(phrase)
+                var phrase = array[0]
+                var translation  = array[1]
+                var phraseObj = Phrase(phrase, translation, array[2], array[3])
+                phraseDao.insert(phraseObj)
+                println(phraseObj.toString())
             }
+
 
         }
 
