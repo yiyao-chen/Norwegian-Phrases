@@ -5,18 +5,23 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PhraseAdapter(
     private val listener: OnItemClickListener
 
-    ): RecyclerView.Adapter<PhraseAdapter.ViewHolder>(){
+    ): RecyclerView.Adapter<PhraseAdapter.ViewHolder>(), Filterable {
 
-    private var phrases = listOf<Phrase>()
+     var phrases = listOf<Phrase>()
+    private var phrasesFull = listOf<Phrase>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
@@ -58,11 +63,48 @@ class PhraseAdapter(
 
     fun updateAdapter(newList: List<Phrase>) {
         phrases = newList
-        println("updated listsize.............." + phrases.size)
-
+        phrasesFull = ArrayList(newList)
     }
 
     interface OnItemClickListener {
         fun onItemClick(phraseClicked: Phrase)
     }
+
+    override fun getFilter(): Filter {
+        return phrasesFilter
+    }
+
+    private val phrasesFilter = object: Filter() {
+        // filter data according to the constraint and return result
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            val filteredList: MutableList<Phrase> = ArrayList()
+
+            val constraintList: MutableList<String> = ArrayList()
+
+            // if search field is empty, use the original list, else use filtered list
+            if(constraint == null || constraint.isEmpty()) {
+                filteredList.addAll(phrasesFull)
+            } else {
+                val filterPattern: String = constraint.toString().lowercase(Locale.ROOT).trim()
+                for (item in phrasesFull) {
+                    if (item.phrase != null) {
+
+                        if (item.phrase.lowercase(Locale.ROOT).contains(filterPattern)) {
+                            filteredList.add(item)
+                        }
+                    }
+                }
+            }
+            val results = FilterResults()
+            results.values = filteredList
+            return results
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            phrases = results?.values as List<Phrase>
+            notifyDataSetChanged()
+        }
+    }
+
+
 }

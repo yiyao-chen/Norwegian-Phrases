@@ -21,7 +21,7 @@ interface PhraseDao {
     fun insertAll(vararg phrases: Phrase)
 
     @Insert
-    fun insert(phrase: Phrase)
+    fun insert(phrase: Phrase?)
 
     @Delete
     fun delete(phrase: Phrase)

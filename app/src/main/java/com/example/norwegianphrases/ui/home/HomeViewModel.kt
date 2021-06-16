@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(application : Application) : AndroidViewModel(application) {
-    private lateinit var db: AppDatabase
+    lateinit var db: AppDatabase
     private lateinit var phraseClicked: Phrase
     private var phraseLive = MutableLiveData<Phrase>()
 
@@ -22,15 +22,14 @@ class HomeViewModel(application : Application) : AndroidViewModel(application) {
     }
     val text: LiveData<String> = _text
 
-    fun getDatabase() {
+    fun getDatabase(): AppDatabase {
         db = AppDatabase.getDatabase(getApplication())
         phraseDao = db.phraseDao()
+        return db
     }
 
     fun populateDatabase() {
         println("populate db")
-
-
         CoroutineScope(Dispatchers.IO).launch {
 /*
             phraseDao.deleteAll()
@@ -40,20 +39,22 @@ class HomeViewModel(application : Application) : AndroidViewModel(application) {
             phraseDao.insert(phrase)
  */
             phraseDao.deleteAll()
-            val lineList = mutableListOf<String>()
             val file = "test.txt"
             getApplication<Application>().assets.open(file).bufferedReader().forEachLine {
                 val array = it.split(";")
-                val phrase = array[0]
-                val translation  = array[1]
-                val phraseObj = Phrase(phrase, translation, array[2], array[3])
+                val phrase = array[0].trim()
+                val translation  = array[1].trim()
+
+                var phraseObj: Phrase? = null
+                if(array.size == 3) {
+                    phraseObj = Phrase(phrase, translation, array[2].trim(), null)
+                }
+                if(array.size == 4) {
+                    phraseObj = Phrase(phrase, translation, array[2].trim(), array[3].trim())
+                }
                 phraseDao.insert(phraseObj)
-                println(phraseObj.toString())
             }
-
-
         }
-
         phrases = phraseDao.getAll().asLiveData()
     }
 

@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="2dp"
+    app:cardElevation="4dp"
     android:layout_margin="10dp"
+    app:contentPadding="5dp"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
     app:cardCornerRadius="10dp"
@@ -20,14 +21,20 @@
             android:id="@+id/phrase_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
+            android:textSize="24sp"
+            android:layout_margin="2dp"
+            android:lineSpacingExtra="8dp"
+            android:text="Text home view created"
             />
 
         <TextView
             android:id="@+id/phrase_translation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"/>
+            android:textSize="18sp"
+            android:layout_margin="2dp"
+            android:lineSpacingExtra="8dp"
+            android:text="同一个东西对不同的人来说意义完全不一样同一个东西对不同的人来说意义完全不一样"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

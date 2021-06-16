@@ -27,6 +27,8 @@ class DetailFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        println("DetailF.onCreateView")
+
         viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
@@ -37,10 +39,10 @@ class DetailFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("o v c")
+        println("DetailF.onViewCreated")
 
         viewModel.clickedPhraseLiveData().observe(viewLifecycleOwner, {
-            println("observe ")
+            println("DetailF.observe ")
             setText(it)
         })
 
@@ -48,15 +50,16 @@ class DetailFragment : Fragment(){
 
     override fun onDestroyView() {
         super.onDestroyView()
+        println("DetailF.onDestroy")
         _binding = null
     }
 
     private fun setText(p : Phrase) {
-        println("set tetx")
-        _binding?.phraseName?.text = p.phrase
-        _binding?.phraseTranslation?.text = p.translation
+        _binding?.phraseName?.text = "\""+ p.phrase + "\""
+        _binding?.phraseTranslation?.text = "\"" + p.translation + "\""
         _binding?.noExplanation?.text = p.no_explanation
         _binding?.chExplanation?.text = p.ch_explanation
+
 
 
     }
