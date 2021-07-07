@@ -53,7 +53,7 @@ class PhraseAdapter(
         val current = phrases[position]
 
         holder.name.text = current.phrase
-        holder.translation.text = current.translation
+        holder.translation.text = current.chTrans
         //holder.no_explanation.text = current.no_explanation
         //holder.ch_explanation.text = current.ch_explanation
 

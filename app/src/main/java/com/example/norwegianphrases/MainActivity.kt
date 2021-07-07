@@ -1,6 +1,8 @@
 package com.example.norwegianphrases
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -31,6 +33,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+    
+    // merge appbar to custom
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.appbar_menu, menu)
+        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {

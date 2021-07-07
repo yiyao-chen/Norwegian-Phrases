@@ -1,65 +1,63 @@
 package com.example.norwegianphrases.ui.home
 
 import android.app.Application
+import android.content.ContentValues
+import android.util.Log
 import androidx.lifecycle.*
-import com.example.norwegianphrases.database.AppDatabase
-import com.example.norwegianphrases.database.PhraseDao
 import com.example.norwegianphrases.database.Phrase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(application : Application) : AndroidViewModel(application) {
-    lateinit var db: AppDatabase
+    val database = Firebase.database("https://norwegian-phrases-default-rtdb.europe-west1.firebasedatabase.app/")
+
     private lateinit var phraseClicked: Phrase
     private var phraseLive = MutableLiveData<Phrase>()
 
-    private lateinit var phraseDao: PhraseDao
-    lateinit var phrases: LiveData<List<Phrase>>
+     var phrases: MutableLiveData<List<Phrase>> = MutableLiveData()
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
 
-    fun getDatabase(): AppDatabase {
-        db = AppDatabase.getDatabase(getApplication())
-        phraseDao = db.phraseDao()
-        return db
-    }
+     fun readFromDatabase() {
+        val myRef = database.getReference("phrases")
+         var tempList: ArrayList<Phrase> = arrayListOf()
 
-    fun populateDatabase() {
-        println("populate db")
-        CoroutineScope(Dispatchers.IO).launch {
-/*
-            phraseDao.deleteAll()
-            var phrase = Phrase(2,"pppp s", "exå: fdf")
-            phraseDao.insert(phrase)
-            phrase = Phrase(0," dasakø pp s", "expl: das")
-            phraseDao.insert(phrase)
- */
-            phraseDao.deleteAll()
-            val file = "test.txt"
-            getApplication<Application>().assets.open(file).bufferedReader().forEachLine {
-                val array = it.split(";")
-                val phrase = array[0].trim()
-                val translation  = array[1].trim()
+         // Read from the database
+        myRef.addValueEventListener(object : ValueEventListener {
 
-                var phraseObj: Phrase? = null
-                if(array.size == 3) {
-                    phraseObj = Phrase(phrase, translation, array[2].trim(), null)
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                for(e in snapshot.children) {
+                    val p = e.getValue(Phrase::class.java)
+                    tempList.add(p!!)
+                    println("--------size--------------- " + tempList.size)
                 }
-                if(array.size == 4) {
-                    phraseObj = Phrase(phrase, translation, array[2].trim(), array[3].trim())
+
+                for(p in tempList) {
+
+                    println("......mmmmmmmmmm. " + p.toString())
                 }
-                phraseDao.insert(phraseObj)
+
+                notifyListLiveData(tempList)
             }
-        }
-        phrases = phraseDao.getAll().asLiveData()
-    }
 
-    @JvmName("getPhrases1")
-    fun getPhrases() = phrases
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+            }
+        })
+    }
+    fun getList() = phrases
+
+    fun notifyListLiveData(list: MutableList<Phrase>){
+        phrases.value = list
+    }
 
     fun setClickedPhrase(phrase: Phrase) {
         phraseClicked = phrase

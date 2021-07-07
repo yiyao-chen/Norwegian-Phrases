@@ -12,9 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.norwegianphrases.R
-import com.example.norwegianphrases.database.AppDatabase
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FragmentHomeBinding
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
@@ -22,7 +23,7 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
     private lateinit var mAdapter: PhraseAdapter
-    private var db: AppDatabase? = null
+   // private var db: AppDatabase? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -34,8 +35,29 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
         homeViewModel =
             ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
-        db = homeViewModel.getDatabase()
-        homeViewModel.populateDatabase()
+        //retrieve data
+        homeViewModel.readFromDatabase()
+        /*
+        // Write a message to the database
+        val database = Firebase.database("https://norwegian-phrases-default-rtdb.europe-west1.firebasedatabase.app/")
+        val myRef = database.getReference("phrases")
+
+        val id = myRef.push().key
+
+        val phrase = Phrase(id, "pp", "s", "dsa", "sd")
+        if (id != null) {
+            myRef.child(id).setValue(phrase).addOnCompleteListener {
+                if(it.isSuccessful) {
+                    println("success---------------------s")
+                }else {
+                    println("????????????????")
+                }
+            }
+        }
+
+         */
+        //db = homeViewModel.getDatabase()
+        //homeViewModel.populateDatabase()
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,15 +91,15 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
        // //val textView: TextView = binding.textHome
 
         // observe livedata in viewmodel and update adapter
-        homeViewModel.getPhrases().observe(viewLifecycleOwner, { dataList->
-            println("homeViewModel.observe----" + "size----" + dataList.size)
+        homeViewModel.getList().observe(viewLifecycleOwner, { dataList->
+            println("homeViewModel.observe----")
             //textView.text = t
 
             mAdapter.updateAdapter(dataList)
             mAdapter.notifyDataSetChanged()
         })
 
-        searchFilter()
+        searchFilter()// search function
 
     }
 

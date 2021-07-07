@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "812070929356",
+    "firebase_url": "https://norwegian-phrases-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "norwegian-phrases",
+    "storage_bucket": "norwegian-phrases.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812070929356:android:14f922f7095bcc13ced369",
+        "android_client_info": {
+          "package_name": "com.example.firebasemanage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812070929356-kjrbvjum831sjprkj91ia41lldqrf0un.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAt5xTIv9UiQN8PGk_fnY5FlEBiYHxsDcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812070929356-kjrbvjum831sjprkj91ia41lldqrf0un.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812070929356:android:1e9709f82ec91150ced369",
+        "android_client_info": {
+          "package_name": "com.example.norwegianphrases"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812070929356-kjrbvjum831sjprkj91ia41lldqrf0un.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAt5xTIv9UiQN8PGk_fnY5FlEBiYHxsDcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812070929356-kjrbvjum831sjprkj91ia41lldqrf0un.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

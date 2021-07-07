@@ -2,15 +2,15 @@ package com.example.norwegianphrases.ui.detail
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FragmentDetailBinding
 import com.example.norwegianphrases.ui.home.HomeViewModel
 
 class DetailFragment : Fragment(){
+    private lateinit var appBarMenu: Menu
 
     companion object {
         fun newInstance() = DetailFragment()
@@ -48,6 +48,8 @@ class DetailFragment : Fragment(){
 
     }
 
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         println("DetailF.onDestroy")
@@ -56,9 +58,9 @@ class DetailFragment : Fragment(){
 
     private fun setText(p : Phrase) {
         _binding?.phraseName?.text = "\""+ p.phrase + "\""
-        _binding?.phraseTranslation?.text = "\"" + p.translation + "\""
-        _binding?.noExplanation?.text = p.no_explanation
-        _binding?.chExplanation?.text = p.ch_explanation
+        _binding?.phraseTranslation?.text = "\"" + p.chTrans + "\""
+        _binding?.noExplanation?.text = p.noExpl
+        _binding?.chExplanation?.text = p.chExpl
 
 
 
