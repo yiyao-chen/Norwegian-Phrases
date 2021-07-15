@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.norwegianphrases.R
 import com.example.norwegianphrases.databinding.FragmentDashboardBinding
 
@@ -35,6 +37,14 @@ class DashboardFragment : Fragment() {
         dashboardViewModel.text.observe(viewLifecycleOwner, {
             textView.text = it
         })
+
+
+        val button: Button = binding.startQuiz
+        button.setOnClickListener() {
+            findNavController().navigate(R.id.action_navigation_dashboard_to_quizFragment)
+
+        }
+
         return root
     }
 

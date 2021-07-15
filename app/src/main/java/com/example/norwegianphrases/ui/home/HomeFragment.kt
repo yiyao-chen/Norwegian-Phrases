@@ -70,7 +70,6 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        println("Home view created")
         return root
     }
 
@@ -118,14 +117,10 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
                 return false
             }
             override fun onQueryTextChange(input: String?): Boolean {
-                println("change -----")
-
-                println("inp: " + input)
                 if (input != null) {
                     if(input.isNotEmpty()) {
                         mAdapter.filter.filter(input)
                         println("filtered : " + input)
-
                     }
                 }
                 return false
