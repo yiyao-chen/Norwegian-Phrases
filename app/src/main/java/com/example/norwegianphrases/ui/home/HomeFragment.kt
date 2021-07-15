@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.norwegianphrases.ActivityViewModel
 import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FragmentHomeBinding
@@ -20,7 +21,9 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
 {
-    private lateinit var homeViewModel: HomeViewModel
+    //private lateinit var homeViewModel: HomeViewModel
+    private val viewModel : ActivityViewModel by activityViewModels()
+
     private var _binding: FragmentHomeBinding? = null
     private lateinit var mAdapter: PhraseAdapter
    // private var db: AppDatabase? = null
@@ -31,51 +34,25 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        println("oncreate")
-        homeViewModel =
-            ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+        println("-------------HomeFragment oncreate")
 
-        //retrieve data
-        homeViewModel.readFromDatabase()
-        /*
-        // Write a message to the database
-        val database = Firebase.database("https://norwegian-phrases-default-rtdb.europe-west1.firebasedatabase.app/")
-        val myRef = database.getReference("phrases")
 
-        val id = myRef.push().key
-
-        val phrase = Phrase(id, "pp", "s", "dsa", "sd")
-        if (id != null) {
-            myRef.child(id).setValue(phrase).addOnCompleteListener {
-                if(it.isSuccessful) {
-                    println("success---------------------s")
-                }else {
-                    println("????????????????")
-                }
-            }
-        }
-
-         */
-        //db = homeViewModel.getDatabase()
-        //homeViewModel.populateDatabase()
     }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        println("HomeF.onCreateView")
-
+        println("--------HomeFragment onCreateView")
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("Home.onViewCreated")
+        println("-----------HomeFragment onViewCreated")
 
         mAdapter = PhraseAdapter(this)
 
@@ -90,8 +67,8 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
        // //val textView: TextView = binding.textHome
 
         // observe livedata in viewmodel and update adapter
-        homeViewModel.getList().observe(viewLifecycleOwner, { dataList->
-            println("homeViewModel.observe----")
+        viewModel.getPhraseLive().observe(viewLifecycleOwner, { dataList->
+            println("ViewModel.observe----")
             //textView.text = t
 
             mAdapter.updateAdapter(dataList)
@@ -130,22 +107,22 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
 
     override fun onPause() {
         super.onPause()
-        println("on pause")
+        println("------------HomeFragment on pause")
         search_bar.setQuery("", false)
         search_bar.isIconified = true
     }
 
     override fun onDestroyView() {
-        println("HomeF.onDestroyView")
+        println("------------HomeF.onDestroyView")
         super.onDestroyView()
         _binding = null
         //search_bar.clearFocus()
-        activity?.let { println("?????"+it.isDestroyed) }
+        //activity?.let { println("?????"+it.isDestroyed) }
     }
 
 
     override fun onItemClick(phraseClicked: Phrase) {
-        homeViewModel.setClickedPhrase(phraseClicked)
+        viewModel.setClickedPhrase(phraseClicked)
         findNavController().navigate(R.id.action_navigation_home_to_detailFragment)
     }
 }

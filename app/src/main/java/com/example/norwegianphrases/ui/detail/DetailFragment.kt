@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.example.norwegianphrases.ActivityViewModel
 import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FragmentDetailBinding
@@ -12,11 +14,7 @@ import com.example.norwegianphrases.ui.home.HomeViewModel
 class DetailFragment : Fragment(){
     private lateinit var appBarMenu: Menu
 
-    companion object {
-        fun newInstance() = DetailFragment()
-    }
-
-    private lateinit var viewModel: HomeViewModel // shared viewmodel
+    private val viewModel: ActivityViewModel by activityViewModels() // shared viewmodel
     private var _binding: FragmentDetailBinding? = null
 
     // This property is only valid between onCreateView and
@@ -27,10 +25,7 @@ class DetailFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        println("DetailF.onCreateView")
-
-        viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
-
+        println("----------DetailF.onCreateView")
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
 
         //inflater.inflate(R.layout.fragment_detail, container, false)
@@ -39,10 +34,10 @@ class DetailFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("DetailF.onViewCreated")
+        println("-----------DetailF.onViewCreated")
 
         viewModel.clickedPhraseLiveData().observe(viewLifecycleOwner, {
-            println("DetailF.observe ")
+            println("----DetailF.observe ")
             setText(it)
         })
 
@@ -52,7 +47,7 @@ class DetailFragment : Fragment(){
 
     override fun onDestroyView() {
         super.onDestroyView()
-        println("DetailF.onDestroy")
+        println("------DetailF.onDestroy")
         _binding = null
     }
 
