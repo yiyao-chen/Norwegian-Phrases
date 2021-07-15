@@ -20,6 +20,7 @@
         android:padding="15dp">
 
     </TextView>
+
     <TextView
         android:id="@+id/option_two"
         android:text="option 2"
@@ -27,14 +28,24 @@
         android:layout_height="wrap_content"
         android:padding="15dp">
 
-    </TextView><TextView
+    </TextView>
+
+    <TextView
     android:id="@+id/option_three"
     android:text="option 3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="15dp">
 
-</TextView>
+    </TextView>
+
+    <Button
+        android:id="@+id/next_quiz_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </Button>
+
 
 
 
