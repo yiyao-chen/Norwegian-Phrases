@@ -14,94 +14,75 @@ import com.example.norwegianphrases.ActivityViewModel
 import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.QuizFragmentBinding
+import com.example.norwegianphrases.ui.notifications.NotificationsViewModel
 import kotlinx.android.synthetic.main.quiz_fragment.*
 
 class QuizFragment : Fragment(), View.OnClickListener {
 
-    private val viewModel: ActivityViewModel by activityViewModels()
-    private var binding: QuizFragmentBinding? = null
-
-
-
-    var phrases = listOf<Phrase>() // all phrases
-
+    private val activityViewModel: ActivityViewModel by activityViewModels()
+    private lateinit var quizViewModel: QuizViewModel
     var quizList = arrayListOf<Phrase>() // 5 quizes
-   // var noPhrases = listOf<Phrase>() // quiz alternatives / norwegian phrases
-    var chTrans = listOf<Phrase>() // answer alternatives/ only chinese translations
 
-    var mCurrentQuizPos: Int = 0
-    var mSelectedOptionPos : Int = 0
+    private var binding: QuizFragmentBinding? = null
+    lateinit var quizPhrase: TextView
+
+
+    // var phrases = listOf<Phrase>() // all phrases
+
+//    var quizList = arrayListOf<Phrase>() // 5 quizes
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        quizViewModel =
+            ViewModelProvider(this).get(QuizViewModel::class.java)
+
         binding = QuizFragmentBinding.inflate(inflater, container, false)
         val root: View = binding!!.root
         // get list of phrases from viewmodel
-        phrases = viewModel.getAllPhrases()
+       // phrases = activityViewModel.getAllPhrases()
 
-        selectQuizes() // randomly select phrases from collection
+        // get list of phrases from activityviewmodel and store in quizviewmodel
+        quizViewModel.setPhrases(activityViewModel.getAllPhrases())
+
+        quizViewModel.selectQuizes() // randomly select phrases from collection
+        quizList = quizViewModel.getQuizList()
+
+        for(p in quizList) {
+            println("list p: " + p.phrase)
+        }
+        quizPhrase = binding!!.quizPhrase
 
         val firstQuiz = displayFirstQuiz()
         displayOptions(firstQuiz) // for first quiz
+
 
         binding!!.optionOne.setOnClickListener(this)
         binding!!.optionTwo.setOnClickListener(this)
         binding!!.optionThree.setOnClickListener(this)
 
+        binding!!.nextQuizButton.setOnClickListener(this)
+
 
         return root
     }
 
-    fun selectQuizes() {
-        val phraseList : ArrayList<Phrase> = arrayListOf() // collection of options
-        phraseList.addAll(phrases)
 
-        for(i in 1..3) {
-            val randomIndex = (phraseList.indices).random()
-            // add randomly selected quiz to quizList, and remove from collection to avoid duplicates
-            val p = phraseList[randomIndex]
-            quizList.add(p)
-            phraseList.remove(p)
-        }
-
-
-    }
     //display random phrase/quiz
     fun displayFirstQuiz() : Phrase {
-        val quizPhrase: TextView = binding!!.quizPhrase
+
+
         quizPhrase.text = quizList[0].phrase
         return quizList[0]
     }
 
     // display answer options
     fun displayOptions(currentQuiz : Phrase) {
-        val phraseList : ArrayList<Phrase> = arrayListOf() // collection of options
-        phraseList.addAll(phrases)
 
-        val optionsList : ArrayList<Phrase> = arrayListOf()
-        optionsList.add(currentQuiz) // add currect option to list
-
-        phraseList.remove(currentQuiz) // remove from options to avoid duplicates
-
-        // add two randomly selected options to list
-        for(i in 1..2) {
-            val randomIndex = (phraseList.indices).random()
-            val p = phraseList[randomIndex]
-            optionsList.add(p)
-            phraseList.remove(p)
-        }
-
-        val shuffledList = optionsList.shuffled()
-        println("optionlist: ")
-        for(p in optionsList) {
-            println("::: "+p.chTrans)
-        }
-        println("shuffled optionlist: ")
-        for(p in shuffledList) {
-            println(":---:: "+p.chTrans)
-        }
+        val shuffledList = quizViewModel.shuffleOptions(currentQuiz)
 
         val option1 = binding!!.optionOne
         val option2 = binding!!.optionTwo
@@ -113,34 +94,52 @@ class QuizFragment : Fragment(), View.OnClickListener {
         option3.text = shuffledList[2].chTrans
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
+
 
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.option_one -> {
-                selectedOptionView(option_one, 1)
+                quizViewModel.changeSelectedOptionView(option_one, 1)
             }
             R.id.option_two -> {
-                selectedOptionView(option_two, 2)
+                quizViewModel.changeSelectedOptionView(option_two, 2)
             }
             R.id.option_three -> {
-                selectedOptionView(option_three, 3)
+                quizViewModel.changeSelectedOptionView(option_three, 3)
+            }
+            R.id.next_quiz_button -> {
+                println("button c: ")
+
+                nextQuiz()
             }
         }
     }
 
-    fun selectedOptionView(tv: TextView, selectedOptionNum: Int) {
-        mSelectedOptionPos = selectedOptionNum
-        tv.setTextColor(Color.parseColor("#FFBB86FC"))
-        if(tv.text == quizList[mCurrentQuizPos].chTrans) {
-            Toast.makeText(activity,"RRR",Toast.LENGTH_SHORT).show()
-        } else if(tv.text != quizList[mCurrentQuizPos].chTrans) {
-            Toast.makeText(activity,"false",Toast.LENGTH_SHORT).show()
+    fun nextQuiz() {
+        quizViewModel.increaseCurrentQuizPos()
+        var index = quizViewModel.getCurrentQuizPos()
 
+        println("index now: " + index)
+
+        if(index >= quizList.size) {
+            println("size " +quizList.size )
+
+            println(">>>>>>")
+            quizPhrase.text = "done"
+            binding!!.nextQuizButton.isClickable = false
+        }else {
+            println("else >>>>>> i: " + index)
+
+            quizPhrase.text = quizList[index].phrase
+            displayOptions(quizList[index])
         }
+    }
+
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
 }
