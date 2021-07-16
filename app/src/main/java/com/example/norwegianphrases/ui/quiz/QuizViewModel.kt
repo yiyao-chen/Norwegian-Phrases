@@ -15,10 +15,7 @@ class QuizViewModel : ViewModel() {
     var mCurrentQuizPos: Int = 0 // counter
     var mSelectedOptionPos : Int = 0
 
-    private val _quiz = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-    val quiz: LiveData<String> = _quiz
+    private var score = MutableLiveData<Int>()
 
     fun setPhrases(list : List<Phrase>) {
         phrases = list
@@ -29,6 +26,8 @@ class QuizViewModel : ViewModel() {
     }
 
     fun selectQuizes() {
+        score.value = 0
+
         val phraseList : ArrayList<Phrase> = arrayListOf() // collection of options
         phraseList.addAll(phrases)
 
@@ -67,17 +66,34 @@ class QuizViewModel : ViewModel() {
     fun changeSelectedOptionView(tv: TextView, selectedOptionNum: Int) {
         mSelectedOptionPos = selectedOptionNum
         tv.setTextColor(Color.parseColor("#FFBB86FC"))
+
+        // if selected option is correct/wrong
         if(tv.text == quizList[mCurrentQuizPos].chTrans) {
-            //Toast.makeText(activity,"RRR", Toast.LENGTH_SHORT).show()
-            println("right")
+            score.value = score.value?.plus(1)
+            println("right, score: " + score)
         } else if(tv.text != quizList[mCurrentQuizPos].chTrans) {
             //Toast.makeText(activity,"false", Toast.LENGTH_SHORT).show()
             println("false")
         }
     }
 
+    fun defaultOptionsView(options : ArrayList<TextView>) {
+        for (o in options) {
+            o.setTextColor(Color.parseColor("#FF000000"))
+            o.isClickable = true
+            o.isEnabled = true
+        }
+
+    }
+
+
+
     fun getCurrentQuizPos() : Int{
         return mCurrentQuizPos
+    }
+
+    fun getScore() : MutableLiveData<Int>{
+        return score
     }
 
     fun increaseCurrentQuizPos(){

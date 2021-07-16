@@ -25,6 +25,11 @@ class QuizFragment : Fragment(), View.OnClickListener {
 
     private var binding: QuizFragmentBinding? = null
     lateinit var quizPhrase: TextView
+    lateinit var mScore: TextView
+
+    lateinit var option1 : TextView
+    lateinit var option2 : TextView
+    lateinit var option3 : TextView
 
 
     // var phrases = listOf<Phrase>() // all phrases
@@ -54,28 +59,35 @@ class QuizFragment : Fragment(), View.OnClickListener {
         for(p in quizList) {
             println("list p: " + p.phrase)
         }
+
         quizPhrase = binding!!.quizPhrase
+        mScore = binding!!.score
+        option1 = binding!!.optionOne
+        option2 = binding!!.optionTwo
+        option3 = binding!!.optionThree
+
 
         val firstQuiz = displayFirstQuiz()
         displayOptions(firstQuiz) // for first quiz
 
+       // mScore.text = "Poeng: " + 0
+        quizViewModel.getScore().observe (viewLifecycleOwner, {
+            mScore.text = it.toString()
+        })
 
         binding!!.optionOne.setOnClickListener(this)
         binding!!.optionTwo.setOnClickListener(this)
         binding!!.optionThree.setOnClickListener(this)
-
         binding!!.nextQuizButton.setOnClickListener(this)
-
 
         return root
     }
 
-
     //display random phrase/quiz
     fun displayFirstQuiz() : Phrase {
-
-
         quizPhrase.text = quizList[0].phrase
+
+        println("text color::::::: "+quizPhrase.textColors)
         return quizList[0]
     }
 
@@ -84,9 +96,7 @@ class QuizFragment : Fragment(), View.OnClickListener {
 
         val shuffledList = quizViewModel.shuffleOptions(currentQuiz)
 
-        val option1 = binding!!.optionOne
-        val option2 = binding!!.optionTwo
-        val option3 = binding!!.optionThree
+
 
         // set text
         option1.text = shuffledList[0].chTrans
@@ -99,32 +109,59 @@ class QuizFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.option_one -> {
+                setUnClickable()
                 quizViewModel.changeSelectedOptionView(option_one, 1)
+
             }
             R.id.option_two -> {
+                setUnClickable()
+
                 quizViewModel.changeSelectedOptionView(option_two, 2)
+
             }
             R.id.option_three -> {
+                setUnClickable()
                 quizViewModel.changeSelectedOptionView(option_three, 3)
+
             }
             R.id.next_quiz_button -> {
-                println("button c: ")
-
                 nextQuiz()
+
+
             }
         }
     }
 
+    // disable option-buttons after selecting one option
+    fun setUnClickable() {
+        var options = ArrayList<TextView>()
+        options.add(option_one)
+        options.add(option_two)
+        options.add(option_three)
+
+        for (o in options) {
+            //o.setTextColor(Color.parseColor("#FF000000"))
+            o.isClickable = false
+            o.isEnabled = false
+
+        }
+    }
+
+
     fun nextQuiz() {
+        var options = ArrayList<TextView>()
+        options.add(option_one)
+        options.add(option_two)
+        options.add(option_three)
+
+        quizViewModel.defaultOptionsView(options) // clear color
+
         quizViewModel.increaseCurrentQuizPos()
         var index = quizViewModel.getCurrentQuizPos()
-
-        println("index now: " + index)
 
         if(index >= quizList.size) {
             println("size " +quizList.size )
 
-            println(">>>>>>")
             quizPhrase.text = "done"
             binding!!.nextQuizButton.isClickable = false
         }else {
@@ -134,8 +171,6 @@ class QuizFragment : Fragment(), View.OnClickListener {
             displayOptions(quizList[index])
         }
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
