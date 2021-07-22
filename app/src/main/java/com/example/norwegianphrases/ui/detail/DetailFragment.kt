@@ -1,6 +1,6 @@
 package com.example.norwegianphrases.ui.detail
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -9,7 +9,7 @@ import com.example.norwegianphrases.ActivityViewModel
 import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FragmentDetailBinding
-import com.example.norwegianphrases.ui.home.HomeViewModel
+
 
 class DetailFragment : Fragment(){
     private lateinit var appBarMenu: Menu
@@ -27,7 +27,7 @@ class DetailFragment : Fragment(){
     ): View? {
         println("----------DetailF.onCreateView")
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
-
+        setHasOptionsMenu(true)
         //inflater.inflate(R.layout.fragment_detail, container, false)
         return binding.root
     }
@@ -35,12 +35,28 @@ class DetailFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         println("-----------DetailF.onViewCreated")
-
         viewModel.clickedPhraseLiveData().observe(viewLifecycleOwner, {
             println("----DetailF.observe ")
             setText(it)
         })
 
+    }
+
+    // add fav-icon to appBar
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.appbar_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.favorite -> {
+
+                println("favorite icon clicked")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 

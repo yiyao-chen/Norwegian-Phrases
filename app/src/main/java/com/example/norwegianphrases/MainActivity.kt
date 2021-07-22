@@ -41,12 +41,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
     
-    // merge appbar to custom
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.appbar_menu, menu)
-        return true
-    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
