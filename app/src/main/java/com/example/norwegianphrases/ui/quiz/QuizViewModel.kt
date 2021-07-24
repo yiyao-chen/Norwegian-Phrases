@@ -12,19 +12,23 @@ class QuizViewModel : ViewModel() {
     private var phrases = listOf<Phrase>() // all phrases
     private var quizList = arrayListOf<Phrase>() // 5 quizes
 
-    var mCurrentQuizPos: Int = 0 // counter
+    var mCurrentQuizPos: Int = 0 // counter for quiz-position in list
     var mSelectedOptionPos : Int = 0
+    
+    lateinit var question: Phrase
 
     private var score = MutableLiveData<Int>()
 
     fun setPhrases(list : List<Phrase>) {
         phrases = list
+        question = phrases[mCurrentQuizPos]
     }
 
     fun getQuizList() : ArrayList<Phrase>{
         return quizList
     }
 
+    // randomly select 3 phrases from phrasesList and add to global quizList
     fun selectQuizes() {
         score.value = 0
 
@@ -42,12 +46,13 @@ class QuizViewModel : ViewModel() {
 
     }
 
+    // shuffle answer options
     fun shuffleOptions(currentQuiz: Phrase): List<Phrase> {
         val phraseList: ArrayList<Phrase> = arrayListOf() // collection of options
         phraseList.addAll(phrases)
 
         val optionsList: ArrayList<Phrase> = arrayListOf()
-        optionsList.add(currentQuiz) // add currect option to list
+        optionsList.add(currentQuiz) // add correct option to list
 
         phraseList.remove(currentQuiz) // remove from options to avoid duplicates
 
@@ -63,6 +68,7 @@ class QuizViewModel : ViewModel() {
     }
 
 
+    // change option view according to right/wrong
     fun changeSelectedOptionView(tv: TextView, selectedOptionNum: Int) {
         mSelectedOptionPos = selectedOptionNum
         tv.setTextColor(Color.parseColor("#FFBB86FC"))
@@ -77,9 +83,11 @@ class QuizViewModel : ViewModel() {
         }
     }
 
+    // set options text color back to default
     fun defaultOptionsView(options : ArrayList<TextView>) {
         for (o in options) {
-            o.setTextColor(Color.parseColor("#FF000000"))
+            o.setTextColor(Color.parseColor("#808080"))
+
             o.isClickable = true
             o.isEnabled = true
         }

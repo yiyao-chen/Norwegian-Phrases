@@ -51,7 +51,7 @@ class DetailFragment : Fragment(){
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.favorite -> {
-
+                //item.setIcon(drawable/icon_favorite_border)
                 println("favorite icon clicked")
                 true
             }

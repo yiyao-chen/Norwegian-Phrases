@@ -55,10 +55,12 @@ class QuizFragment : Fragment(), View.OnClickListener {
 
         quizViewModel.selectQuizes() // randomly select phrases from collection
         quizList = quizViewModel.getQuizList()
-
+/*
         for(p in quizList) {
             println("list p: " + p.phrase)
         }
+
+ */
 
         quizPhrase = binding!!.quizPhrase
         mScore = binding!!.score
@@ -66,6 +68,10 @@ class QuizFragment : Fragment(), View.OnClickListener {
         option2 = binding!!.optionTwo
         option3 = binding!!.optionThree
 
+        // progressbar
+        val progressbar = binding!!.progressBar
+        progressbar.progress = quizViewModel.getCurrentQuizPos()
+        binding!!.tvProgress.text = quizViewModel.getCurrentQuizPos().toString() + "/3"
 
         val firstQuiz = displayFirstQuiz()
         displayOptions(firstQuiz) // for first quiz
@@ -91,12 +97,9 @@ class QuizFragment : Fragment(), View.OnClickListener {
         return quizList[0]
     }
 
-    // display answer options
+    // display answer options for the quiz
     fun displayOptions(currentQuiz : Phrase) {
-
         val shuffledList = quizViewModel.shuffleOptions(currentQuiz)
-
-
 
         // set text
         option1.text = shuffledList[0].chTrans
@@ -104,30 +107,23 @@ class QuizFragment : Fragment(), View.OnClickListener {
         option3.text = shuffledList[2].chTrans
     }
 
-
-
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.option_one -> {
                 setUnClickable()
                 quizViewModel.changeSelectedOptionView(option_one, 1)
-
             }
             R.id.option_two -> {
                 setUnClickable()
-
                 quizViewModel.changeSelectedOptionView(option_two, 2)
 
             }
             R.id.option_three -> {
                 setUnClickable()
                 quizViewModel.changeSelectedOptionView(option_three, 3)
-
             }
             R.id.next_quiz_button -> {
                 nextQuiz()
-
-
             }
         }
     }
@@ -163,7 +159,8 @@ class QuizFragment : Fragment(), View.OnClickListener {
             println("size " +quizList.size )
 
             quizPhrase.text = "done"
-            binding!!.nextQuizButton.isClickable = false
+            binding!!.nextQuizButton.isClickable = false // disable next-button
+            setUnClickable() // disable options
         }else {
             println("else >>>>>> i: " + index)
 
