@@ -1,21 +1,27 @@
 package com.example.norwegianphrases.ui.quiz
 
+import android.app.Application
+import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
 
-class QuizViewModel : ViewModel() {
+class QuizViewModel(application: Application) : AndroidViewModel(application) {
 
     private var phrases = listOf<Phrase>() // all phrases
     private var quizList = arrayListOf<Phrase>() // 5 quizes
 
     var mCurrentQuizPos: Int = 0 // counter for quiz-position in list
-    var mSelectedOptionPos : Int = 0
-    
-    lateinit var question: Phrase
+    var mSelectedOptionPos : Int = 0 // which option user selected
+
+    lateinit var question: Phrase //current quiz
 
     private var score = MutableLiveData<Int>()
 
@@ -46,7 +52,7 @@ class QuizViewModel : ViewModel() {
 
     }
 
-    // shuffle answer options
+    // add correct answer to optionList, ramdomly select another 2 options and shuffle optionlist
     fun shuffleOptions(currentQuiz: Phrase): List<Phrase> {
         val phraseList: ArrayList<Phrase> = arrayListOf() // collection of options
         phraseList.addAll(phrases)
@@ -69,17 +75,22 @@ class QuizViewModel : ViewModel() {
 
 
     // change option view according to right/wrong
-    fun changeSelectedOptionView(tv: TextView, selectedOptionNum: Int) {
+    fun changeSelectedOptionView(optionTv: TextView, selectedOptionNum: Int) {
         mSelectedOptionPos = selectedOptionNum
-        tv.setTextColor(Color.parseColor("#FFBB86FC"))
-
+        optionTv.typeface = Typeface.DEFAULT
         // if selected option is correct/wrong
-        if(tv.text == quizList[mCurrentQuizPos].chTrans) {
+        if(optionTv.text == quizList[mCurrentQuizPos].chTrans) {
             score.value = score.value?.plus(1)
+            optionTv.background = ContextCompat.getDrawable(
+                getApplication(),
+                R.drawable.correct_option_border_bg)
             println("right, score: " + score)
-        } else if(tv.text != quizList[mCurrentQuizPos].chTrans) {
+        } else if(optionTv.text != quizList[mCurrentQuizPos].chTrans) {
             //Toast.makeText(activity,"false", Toast.LENGTH_SHORT).show()
             println("false")
+            optionTv.background = ContextCompat.getDrawable(
+                getApplication(),
+                R.drawable.wrong_option_border_bg)
         }
     }
 
@@ -87,7 +98,10 @@ class QuizViewModel : ViewModel() {
     fun defaultOptionsView(options : ArrayList<TextView>) {
         for (o in options) {
             o.setTextColor(Color.parseColor("#808080"))
-
+            o.typeface  = Typeface.DEFAULT
+            o.background = ContextCompat.getDrawable(
+                getApplication(),
+                R.drawable.default_option_border_bg)
             o.isClickable = true
             o.isEnabled = true
         }

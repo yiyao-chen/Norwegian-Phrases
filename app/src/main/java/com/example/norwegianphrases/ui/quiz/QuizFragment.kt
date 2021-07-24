@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -23,6 +24,9 @@ class QuizFragment : Fragment(), View.OnClickListener {
     private lateinit var quizViewModel: QuizViewModel
     var quizList = arrayListOf<Phrase>() // 5 quizes
 
+    lateinit var optionList: List<Phrase> // options for current quiz
+    private var optionTvList = ArrayList<TextView>() // textviews
+
     private var binding: QuizFragmentBinding? = null
     lateinit var quizPhrase: TextView
     lateinit var mScore: TextView
@@ -30,6 +34,7 @@ class QuizFragment : Fragment(), View.OnClickListener {
     lateinit var option1 : TextView
     lateinit var option2 : TextView
     lateinit var option3 : TextView
+    lateinit var progressbar: ProgressBar
 
 
     // var phrases = listOf<Phrase>() // all phrases
@@ -68,8 +73,13 @@ class QuizFragment : Fragment(), View.OnClickListener {
         option2 = binding!!.optionTwo
         option3 = binding!!.optionThree
 
+        optionTvList.add(option1)
+        optionTvList.add(option2)
+        optionTvList.add(option3)
+
+
         // progressbar
-        val progressbar = binding!!.progressBar
+        progressbar = binding!!.progressBar
         progressbar.progress = quizViewModel.getCurrentQuizPos()
         binding!!.tvProgress.text = quizViewModel.getCurrentQuizPos().toString() + "/3"
 
@@ -92,15 +102,18 @@ class QuizFragment : Fragment(), View.OnClickListener {
     //display random phrase/quiz
     fun displayFirstQuiz() : Phrase {
         quizPhrase.text = quizList[0].phrase
+        progressbar.progress = quizViewModel.getCurrentQuizPos()
+        binding!!.tvProgress.text = quizViewModel.getCurrentQuizPos().toString() + "/3"
 
-        println("text color::::::: "+quizPhrase.textColors)
         return quizList[0]
     }
 
     // display answer options for the quiz
     fun displayOptions(currentQuiz : Phrase) {
-        val shuffledList = quizViewModel.shuffleOptions(currentQuiz)
+        quizViewModel.defaultOptionsView(optionTvList) // clear color
 
+        val shuffledList = quizViewModel.shuffleOptions(currentQuiz)
+        optionList = shuffledList
         // set text
         option1.text = shuffledList[0].chTrans
         option2.text = shuffledList[1].chTrans
@@ -123,35 +136,52 @@ class QuizFragment : Fragment(), View.OnClickListener {
                 quizViewModel.changeSelectedOptionView(option_three, 3)
             }
             R.id.next_quiz_button -> {
-                nextQuiz()
+                quizViewModel.increaseCurrentQuizPos()
+                var index = quizViewModel.getCurrentQuizPos()
+
+                if(index >= quizList.size) { // all quizes have been answered
+                    println("size " +quizList.size )
+
+                    quizPhrase.text = "done"
+                    binding!!.nextQuizButton.text = "finished"
+                    binding!!.nextQuizButton.isClickable = false // disable next-button
+                    setUnClickable() // disable options
+                }else { //
+                    println("else >>>>>> i: " + index)
+                    nextQuiz()
+
+
+                }
             }
         }
     }
 
     // disable option-buttons after selecting one option
     fun setUnClickable() {
+        /*
         var options = ArrayList<TextView>()
         options.add(option_one)
         options.add(option_two)
         options.add(option_three)
 
-        for (o in options) {
+         */
+        for (o in optionTvList) {
             //o.setTextColor(Color.parseColor("#FF000000"))
             o.isClickable = false
             o.isEnabled = false
-
         }
     }
 
 
     fun nextQuiz() {
+        /*
         var options = ArrayList<TextView>()
         options.add(option_one)
         options.add(option_two)
         options.add(option_three)
 
-        quizViewModel.defaultOptionsView(options) // clear color
-
+         */
+        /*
         quizViewModel.increaseCurrentQuizPos()
         var index = quizViewModel.getCurrentQuizPos()
 
@@ -164,9 +194,13 @@ class QuizFragment : Fragment(), View.OnClickListener {
         }else {
             println("else >>>>>> i: " + index)
 
+
+         */
+            var index = quizViewModel.getCurrentQuizPos()
+
             quizPhrase.text = quizList[index].phrase
             displayOptions(quizList[index])
-        }
+        //}
     }
 
     override fun onDestroyView() {
