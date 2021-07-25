@@ -110,7 +110,9 @@ class QuizFragment : Fragment(), View.OnClickListener {
 
     // display answer options for the quiz
     fun displayOptions(currentQuiz : Phrase) {
+
         quizViewModel.defaultOptionsView(optionTvList) // clear color
+
 
         val shuffledList = quizViewModel.shuffleOptions(currentQuiz)
         optionList = shuffledList
@@ -136,13 +138,20 @@ class QuizFragment : Fragment(), View.OnClickListener {
                 quizViewModel.changeSelectedOptionView(option_three, 3)
             }
             R.id.next_quiz_button -> {
+                var progress = quizViewModel.getCurrentQuizPos()+1
+                progressbar.progress = progress
+                binding!!.tvProgress.text = progress.toString() + "/3"
+
                 quizViewModel.increaseCurrentQuizPos()
                 var index = quizViewModel.getCurrentQuizPos()
 
                 if(index >= quizList.size) { // all quizes have been answered
-                    println("size " +quizList.size )
 
-                    quizPhrase.text = "done"
+                    // get score
+                    quizViewModel.getScore().observe (viewLifecycleOwner, {
+                        quizPhrase.text = "你答对了" + it.toString() + "道题"
+
+                    })
                     binding!!.nextQuizButton.text = "finished"
                     binding!!.nextQuizButton.isClickable = false // disable next-button
                     setUnClickable() // disable options
