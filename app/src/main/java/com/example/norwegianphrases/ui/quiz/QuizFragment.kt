@@ -120,6 +120,7 @@ class QuizFragment : Fragment(), View.OnClickListener {
         option1.text = shuffledList[0].chTrans
         option2.text = shuffledList[1].chTrans
         option3.text = shuffledList[2].chTrans
+
     }
 
     override fun onClick(v: View?) {
@@ -138,12 +139,15 @@ class QuizFragment : Fragment(), View.OnClickListener {
                 quizViewModel.changeSelectedOptionView(option_three, 3)
             }
             R.id.next_quiz_button -> {
+                //update progressbar
                 var progress = quizViewModel.getCurrentQuizPos()+1
                 progressbar.progress = progress
                 binding!!.tvProgress.text = progress.toString() + "/3"
 
                 quizViewModel.increaseCurrentQuizPos()
                 var index = quizViewModel.getCurrentQuizPos()
+
+
 
                 if(index >= quizList.size) { // all quizes have been answered
 
@@ -205,11 +209,18 @@ class QuizFragment : Fragment(), View.OnClickListener {
 
 
          */
-            var index = quizViewModel.getCurrentQuizPos()
+
+
+        var index = quizViewModel.getCurrentQuizPos()
 
             quizPhrase.text = quizList[index].phrase
             displayOptions(quizList[index])
         //}
+
+        // remove icons
+        for(o in optionTvList) {
+            o.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0)
+        }
     }
 
     override fun onDestroyView() {

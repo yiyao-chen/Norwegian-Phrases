@@ -80,17 +80,25 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
         optionTv.typeface = Typeface.DEFAULT
         // if selected option is correct/wrong
         if(optionTv.text == quizList[mCurrentQuizPos].chTrans) {
-            score.value = score.value?.plus(1)
+            score.value = score.value?.plus(1) // add 1 point to score
+
+            // change textView border
             optionTv.background = ContextCompat.getDrawable(
                 getApplication(),
                 R.drawable.correct_option_border_bg)
-            println("right, score: " + score)
+            // display right icon
+            optionTv.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_done_24,0)
+
         } else if(optionTv.text != quizList[mCurrentQuizPos].chTrans) {
             //Toast.makeText(activity,"false", Toast.LENGTH_SHORT).show()
             println("false")
+            // change textview border
             optionTv.background = ContextCompat.getDrawable(
                 getApplication(),
                 R.drawable.wrong_option_border_bg)
+            // display wrong icon
+            optionTv.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_close_24,0)
+
         }
     }
 
