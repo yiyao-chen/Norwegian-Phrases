@@ -39,12 +39,17 @@ class DashboardFragment : Fragment() {
         })
 
 
+        // quiz type 1: multiple choice
         val button: Button = binding.startQuiz
         button.setOnClickListener() {
             findNavController().navigate(R.id.action_navigation_dashboard_to_quizFragment)
-
         }
 
+        // quiz type 2: fill in blanks
+        val buttonFillBlanks: Button = binding.fillInBlanks
+        buttonFillBlanks.setOnClickListener() {
+            findNavController().navigate(R.id.action_navigation_dashboard_to_fillBlanksFragment)
+        }
         return root
     }
 

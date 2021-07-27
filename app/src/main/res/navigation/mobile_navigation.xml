@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_quizFragment"
             app:destination="@id/quizFragment" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_fillBlanksFragment"
+            app:destination="@id/fillBlanksFragment" />
     </fragment>
 
     <fragment
@@ -38,6 +41,10 @@
     <fragment
         android:id="@+id/quizFragment"
         android:name="com.example.norwegianphrases.ui.quiz.QuizFragment"
-        android:label="quiz_fragment"
-        tools:layout="@layout/quiz_fragment" />
+        android:label="quiz_fragment" />
+    <fragment
+        android:id="@+id/fillBlanksFragment"
+        android:name="com.example.norwegianphrases.ui.quiz.FillBlanksFragment"
+        android:label="fill_blanks_fragment"
+        tools:layout="@layout/fill_blanks_fragment" />
 </navigation>
