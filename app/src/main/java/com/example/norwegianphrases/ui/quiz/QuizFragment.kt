@@ -36,12 +36,6 @@ class QuizFragment : Fragment(), View.OnClickListener {
     lateinit var option3 : TextView
     lateinit var progressbar: ProgressBar
 
-
-    // var phrases = listOf<Phrase>() // all phrases
-
-//    var quizList = arrayListOf<Phrase>() // 5 quizes
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -15,14 +15,24 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import com.example.norwegianphrases.ActivityViewModel
+import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FillBlanksFragmentBinding
 
 
 class FillBlanksFragment : Fragment() {
 
+    private val activityViewModel: ActivityViewModel by activityViewModels()
     private lateinit var fillBlanksViewModel: FillBlanksViewModel
     private var binding: FillBlanksFragmentBinding? = null
+
+    private var allPhrases = listOf<Phrase>() // all phrases
+    var quizList = arrayListOf<Phrase>() // 5 quizes
+
+    lateinit var currentQuiz: Phrase //current quiz
+    var currentPos: Int = 0 // counter for quiz-position in quizList
 
     lateinit var answer: String
     var testPhrase: String = "Å holde tunga rett i munn"
@@ -39,7 +49,7 @@ class FillBlanksFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         fillBlanksViewModel =
             ViewModelProvider(this).get(FillBlanksViewModel::class.java)
 
@@ -52,9 +62,13 @@ class FillBlanksFragment : Fragment() {
         return root
     }
 
-    // display first sentence
+    // display first sentence and initialize button onclick functions
     @SuppressLint("ClickableViewAccessibility")
     fun init() {
+        getPhrasesFromDb(activityViewModel.getAllPhrases()) // get list of phrases from database
+
+        selectQuizes() // randomly select 5 phrases from collection as questions
+
         firstPart = binding!!.phraseFirst
         lastPart = binding!!.phraseLast
         blankPart = binding!!.phraseBlank
@@ -69,12 +83,38 @@ class FillBlanksFragment : Fragment() {
         answer = array[1]
         println("answe:: "+answer)
 
-        binding!!.layoutFillInBlank.setOnTouchListener(OnTouchListener { v, event ->
+        binding!!.layoutFillInBlank.setOnTouchListener { v, event ->
             println("touched")
             hideKeyBoard()
             true
-        })
         }
+    }
+
+
+    fun getPhrasesFromDb(list : List<Phrase>) {
+        allPhrases = list
+        currentQuiz = allPhrases[currentPos]
+    }
+
+    // randomly select 3 phrases from phrasesList and add to global quizList
+    fun selectQuizes() {
+       // score.value = 0
+
+        val phraseList : ArrayList<Phrase> = arrayListOf() // collection of options
+        phraseList.addAll(allPhrases)
+
+        for(i in 1..3) {
+            val randomIndex = (phraseList.indices).random()
+            // add randomly selected quiz to quizList, and remove from collection to avoid duplicates
+            val p = phraseList[randomIndex]
+            quizList.add(p)
+            phraseList.remove(p)
+        }
+
+        for(p in quizList) {
+            println("list p: " + p.phrase)
+        }
+    }
 
     private fun hideKeyBoard() {
         val view = activity?.currentFocus
@@ -93,6 +133,9 @@ class FillBlanksFragment : Fragment() {
             if(input == answer) {
                 println(" ..." + true)
                 binding!!.btnNextFillBlank.setVisibility(View.VISIBLE)
+            } else {
+                println(" ..." + false)
+
             }
         }
     }
