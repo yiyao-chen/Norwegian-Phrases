@@ -5,7 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".ui.quiz.FillBlanksFragment">
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:id="@+id/layout_fill_in_blank"
+    tools:context=".ui.quiz.FillBlanksFragment"
+    >
 
     <TextView
         android:id="@+id/phrase"
@@ -28,8 +33,11 @@
 
     <EditText
         android:id="@+id/phrase_blank"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
+        android:minWidth="60dp"
         android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
         />
     <TextView
         android:id="@+id/phrase_last"
@@ -41,6 +49,18 @@
 </LinearLayout>
 
 
+    <Button
+        android:text="check"
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:text="next"
+        android:id="@+id/btn_next_fill_blank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"/>
 
 
 </LinearLayout>
