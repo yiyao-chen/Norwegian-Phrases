@@ -42,6 +42,9 @@ class FillBlanksFragment : Fragment() {
     lateinit var blankPart: EditText
     lateinit var lastPart: TextView
 
+    lateinit var chTranslation: TextView
+    lateinit var noExplanation: TextView
+
 
 
     //lateinit var content: SpannableStringBuilder
@@ -56,15 +59,16 @@ class FillBlanksFragment : Fragment() {
         binding = FillBlanksFragmentBinding.inflate(inflater, container, false)
         val root: View = binding!!.root
 
-        init()
+        initView()
         initCheckButton()
+        initNextButton()
 
         return root
     }
 
     // display first sentence and initialize button onclick functions
     @SuppressLint("ClickableViewAccessibility")
-    fun init() {
+    fun initView() {
         getPhrasesFromDb(activityViewModel.getAllPhrases()) // get list of phrases from database
 
         selectQuizes() // randomly select 5 phrases from collection as questions
@@ -73,15 +77,10 @@ class FillBlanksFragment : Fragment() {
         lastPart = binding!!.phraseLast
         blankPart = binding!!.phraseBlank
 
-        val array = testPhrase.split(" ")
-        // the part after ____
-        val subarray = array.slice(2..array.size-1)
+        chTranslation = binding!!.chTranslation
+        noExplanation = binding!!.noExplanation
 
-        firstPart.text = array[0]
-        lastPart.text  = subarray.toString()
-
-        answer = array[1]
-        println("answe:: "+answer)
+        setQuiz()
 
         binding!!.layoutFillInBlank.setOnTouchListener { v, event ->
             println("touched")
@@ -116,6 +115,8 @@ class FillBlanksFragment : Fragment() {
         }
     }
 
+
+
     private fun hideKeyBoard() {
         val view = activity?.currentFocus
         if (view != null) {
@@ -139,6 +140,52 @@ class FillBlanksFragment : Fragment() {
             }
         }
     }
+
+    fun initNextButton() {
+
+        binding!!.btnNextFillBlank.setOnClickListener() {
+            currentPos++
+            println("pos: " + currentPos)
+
+            if(currentPos < quizList.size) {
+                setQuiz() // set next quiz
+                // hide NEXT-btn
+                binding!!.btnNextFillBlank.setVisibility(View.GONE)
+
+            } else {
+                println("finished")
+                //hide views
+                binding!!.phraseFirst.setVisibility(View.GONE)
+                binding!!.phraseBlank.setVisibility(View.GONE)
+                binding!!.phraseLast.setVisibility(View.GONE)
+
+                chTranslation.setVisibility(View.GONE)
+                noExplanation.setVisibility(View.GONE)
+
+                binding!!.check.setVisibility(View.GONE)
+                binding!!.btnNextFillBlank.setVisibility(View.GONE)
+            }
+
+        }
+    }
+
+    // display quiz
+    fun setQuiz() {
+        val array = quizList[currentPos].phrase?.split(" ")    // phrase in str-array format
+
+        println("set quiz : " +  array.toString())
+        val subarray = array?.slice(2 until array.size)     // the part after ____
+
+        firstPart.text = array!![0]
+        lastPart.text  = subarray.toString()
+
+        answer = array[1]
+        println("answer:: "+answer)
+
+        chTranslation.text = quizList[currentPos].chTrans
+        noExplanation.text = quizList[currentPos].noExpl
+    }
+
 /*
     fun niiit() {
         tvContent = binding!!.phrase
