@@ -3,23 +3,23 @@ package com.example.norwegianphrases.ui.quiz
 import android.R
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnFocusChangeListener
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.norwegianphrases.ActivityViewModel
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FillBlanksFragmentBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FillBlanksFragment : Fragment() {
@@ -46,8 +46,6 @@ class FillBlanksFragment : Fragment() {
     lateinit var noExplanation: TextView
 
 
-
-    //lateinit var content: SpannableStringBuilder
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,7 +64,7 @@ class FillBlanksFragment : Fragment() {
         return root
     }
 
-    // display first sentence and initialize button onclick functions
+    // initialize views and button onclick functions when user takes quiz for the first time
     @SuppressLint("ClickableViewAccessibility")
     fun initView() {
         getPhrasesFromDb(activityViewModel.getAllPhrases()) // get list of phrases from database
@@ -83,26 +81,42 @@ class FillBlanksFragment : Fragment() {
         setQuiz()
 
         binding!!.layoutFillInBlank.setOnTouchListener { v, event ->
-            println("touched")
             hideKeyBoard()
             true
         }
     }
 
+    // set views back when user chooses to do quiz again after finishing a set of quizes
+    private fun resetView() {
+        firstPart.setVisibility(View.VISIBLE)
+        blankPart.setVisibility(View.VISIBLE)
+        lastPart.setVisibility(View.VISIBLE)
+        binding!!.chFlag.setVisibility(View.VISIBLE)
+        binding!!.noFlag.setVisibility(View.VISIBLE)
 
-    fun getPhrasesFromDb(list : List<Phrase>) {
+        chTranslation.setVisibility(View.VISIBLE)
+        noExplanation.setVisibility(View.VISIBLE)
+
+        currentPos = 0
+        quizList.clear()
+        selectQuizes()
+        setQuiz()
+    }
+
+
+    private fun getPhrasesFromDb(list : List<Phrase>) {
         allPhrases = list
         currentQuiz = allPhrases[currentPos]
     }
 
     // randomly select 3 phrases from phrasesList and add to global quizList
-    fun selectQuizes() {
+    private fun selectQuizes() {
        // score.value = 0
 
         val phraseList : ArrayList<Phrase> = arrayListOf() // collection of options
         phraseList.addAll(allPhrases)
 
-        for(i in 1..3) {
+        for(i in 1..2) {
             val randomIndex = (phraseList.indices).random()
             // add randomly selected quiz to quizList, and remove from collection to avoid duplicates
             val p = phraseList[randomIndex]
@@ -117,6 +131,7 @@ class FillBlanksFragment : Fragment() {
 
 
 
+
     private fun hideKeyBoard() {
         val view = activity?.currentFocus
         if (view != null) {
@@ -128,14 +143,26 @@ class FillBlanksFragment : Fragment() {
     fun initCheckButton() {
         binding!!.check.setOnClickListener() {
             val input = blankPart.text.toString()
-            println("input: " + input)
             hideKeyBoard()
 
-            if(input == answer) {
+            if(input.trim().lowercase() == answer.lowercase()) { // show next-btn if answer is correct
                 println(" ..." + true)
                 binding!!.btnNextFillBlank.setVisibility(View.VISIBLE)
             } else {
                 println(" ..." + false)
+            }
+
+            if ( currentPos == quizList.size) {
+                binding!!.check.text = "提交"
+                binding!!.btnNextFillBlank.text = "下一题"
+                binding!!.btnNextFillBlank.setVisibility(View.GONE)
+
+                resetView()
+
+                println("currentPos == quizList.size")
+
+
+
 
             }
         }
@@ -149,21 +176,24 @@ class FillBlanksFragment : Fragment() {
 
             if(currentPos < quizList.size) {
                 setQuiz() // set next quiz
-                // hide NEXT-btn
-                binding!!.btnNextFillBlank.setVisibility(View.GONE)
+                binding!!.btnNextFillBlank.setVisibility(View.GONE) // hide NEXT-btn
 
-            } else {
+            } else if (currentPos == quizList.size) { // has gone through all quizes
                 println("finished")
                 //hide views
-                binding!!.phraseFirst.setVisibility(View.GONE)
-                binding!!.phraseBlank.setVisibility(View.GONE)
-                binding!!.phraseLast.setVisibility(View.GONE)
+                firstPart.setVisibility(View.GONE)
+                blankPart.setVisibility(View.GONE)
+                lastPart.setVisibility(View.GONE)
+                binding!!.chFlag.setVisibility(View.GONE)
+                binding!!.noFlag.setVisibility(View.GONE)
 
                 chTranslation.setVisibility(View.GONE)
                 noExplanation.setVisibility(View.GONE)
 
-                binding!!.check.setVisibility(View.GONE)
-                binding!!.btnNextFillBlank.setVisibility(View.GONE)
+                binding!!.check.text = "再来几题"
+                binding!!.btnNextFillBlank.text = "退出"
+            } else if (currentPos > quizList.size) { // when user clicks "tui chu"
+                findNavController().navigate(com.example.norwegianphrases.R.id.action_fillBlanksFragment_to_navigation_home)
             }
 
         }
@@ -185,40 +215,5 @@ class FillBlanksFragment : Fragment() {
         chTranslation.text = quizList[currentPos].chTrans
         noExplanation.text = quizList[currentPos].noExpl
     }
-
-/*
-    fun niiit() {
-        tvContent = binding!!.phrase
-
-        content = SpannableStringBuilder(testPhrase)
-        answer = testPhrase.split(" ")[1]
-        println("answer: " + answer)
-        val s:String = "hei ___ das"
-        val colorSpan: ForegroundColorSpan = ForegroundColorSpan(Color.GREEN)
-        val ss: SpannableString = SpannableString(testPhrase)
-
-
-        ss.setSpan(colorSpan, 2, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        tvContent.setText(ss)
-
-        val clickableSpan: ClickableSpan = object: ClickableSpan() {
-            override fun onClick(v: View) {
-                println("span clicked")
-                val view: View = LayoutInflater.from(context).inflate(R.layout.popup_input, null)
-
-               // val popupWindow = PopupWindow(view, LayoutParams.MATCH_PARENT, dp2px(40))
-            }
-
-        }
-
-        ss.setSpan(clickableSpan, 3,12,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        // activate click-method
-        tvContent.setMovementMethod(LinkMovementMethod.getInstance())
-        tvContent.setText(ss)
-
-    }
-
-
- */
 
 }

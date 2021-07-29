@@ -46,5 +46,9 @@
         android:id="@+id/fillBlanksFragment"
         android:name="com.example.norwegianphrases.ui.quiz.FillBlanksFragment"
         android:label="fill_blanks_fragment"
-        tools:layout="@layout/fill_blanks_fragment" />
+        tools:layout="@layout/fill_blanks_fragment" >
+        <action
+            android:id="@+id/action_fillBlanksFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 </navigation>

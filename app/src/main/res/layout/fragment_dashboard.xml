@@ -1,41 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
+    android:layout_margin="10dp"
     tools:context=".ui.dashboard.DashboardFragment">
 
-    <Button
-        android:id="@+id/start_quiz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="multiple choice">
-
-    </Button>
     <TextView
-        android:id="@+id/text_dashboard"
+        android:id="@+id/header_quizfragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="10dp"
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="22sp"
+        tools:text="做几道测验题吧"/>
 
+    <TextView
+        android:id="@+id/text_choose_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        tools:text="选择题目类型"/>
 
     <Button
-        android:id="@+id/fill_in_blanks"
+        android:id="@+id/btn_multiple_choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="fill in blanks">
+        android:minWidth="100dp"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:textSize="20sp"
+        tools:text="选择题"
+        >
+    </Button>
+
+    <Button
+        android:id="@+id/btn_fill_in_blanks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="20sp"
+        android:minWidth="100dp"
+
+        >
 
     </Button>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
 
 </LinearLayout>

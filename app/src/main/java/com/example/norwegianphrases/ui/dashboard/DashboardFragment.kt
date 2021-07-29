@@ -33,26 +33,42 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
-        })
+        // set text to textViews and buttons
+        initViews()
+
+        // set onClickListener on buttons
+        setButtonFunction()
 
 
-        // quiz type 1: multiple choice
-        val button: Button = binding.startQuiz
-        button.setOnClickListener() {
-            findNavController().navigate(R.id.action_navigation_dashboard_to_quizFragment)
-        }
-
-        // quiz type 2: fill in blanks
-        val buttonFillBlanks: Button = binding.fillInBlanks
-        buttonFillBlanks.setOnClickListener() {
-            findNavController().navigate(R.id.action_navigation_dashboard_to_fillBlanksFragment)
-        }
         return root
     }
 
+    private fun initViews() {
+        val textView: TextView = binding.textChooseType
+        dashboardViewModel.instruction.observe(viewLifecycleOwner, {
+            textView.text = it
+        })
+
+        binding.headerQuizfragment.text = "做几道测验题吧"
+        binding.btnMultipleChoice.text = "选择题"
+        binding.btnFillInBlanks.text = "填空题"
+
+    }
+
+    fun setButtonFunction() {
+        // quiz type 1: multiple choice
+        val button: Button = binding.btnMultipleChoice
+        button.setOnClickListener() {
+            findNavController().navigate(R.id.action_navigation_dashboard_to_quizFragment)
+
+        }
+
+        // quiz type 2: fill in blanks
+        val buttonFillBlanks: Button = binding.btnFillInBlanks
+        buttonFillBlanks.setOnClickListener() {
+            findNavController().navigate(R.id.action_navigation_dashboard_to_fillBlanksFragment)
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
