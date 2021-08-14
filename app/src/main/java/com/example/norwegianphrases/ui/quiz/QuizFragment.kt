@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.norwegianphrases.ActivityViewModel
 import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
@@ -54,12 +55,6 @@ class QuizFragment : Fragment(), View.OnClickListener {
 
         quizViewModel.selectQuizes() // randomly select phrases from collection
         quizList = quizViewModel.getQuizList()
-/*
-        for(p in quizList) {
-            println("list p: " + p.phrase)
-        }
-
- */
 
         quizPhrase = binding!!.quizPhrase
         mScore = binding!!.score
@@ -134,30 +129,30 @@ class QuizFragment : Fragment(), View.OnClickListener {
             }
             R.id.next_quiz_button -> {
                 //update progressbar
-                var progress = quizViewModel.getCurrentQuizPos()+1
+                val progress = quizViewModel.getCurrentQuizPos()+1
                 progressbar.progress = progress
-                binding!!.tvProgress.text = progress.toString() + "/3"
+                binding!!.tvProgress.text = progress.toString() + "/" + quizList.size.toString()
 
                 quizViewModel.increaseCurrentQuizPos()
                 var index = quizViewModel.getCurrentQuizPos()
 
 
-
-                if(index >= quizList.size) { // all quizes have been answered
+                if(index < quizList.size) {
+                    println("else >>>>>> i: " + index)
+                    nextQuiz()
+                } else if(index == quizList.size) { // all quizes have been answered
 
                     // get score
                     quizViewModel.getScore().observe (viewLifecycleOwner, {
                         quizPhrase.text = "你答对了" + it.toString() + "道题"
 
                     })
-                    binding!!.nextQuizButton.text = "finished"
-                    binding!!.nextQuizButton.isClickable = false // disable next-button
-                    setUnClickable() // disable options
-                }else { //
-                    println("else >>>>>> i: " + index)
-                    nextQuiz()
+                    binding!!.nextQuizButton.text = "退出"
+                    //binding!!.nextQuizButton.isClickable = false // disable next-button
+                    setUnClickable() // disable option-buttons
 
-
+                }else { // exit
+                    findNavController().navigate(R.id.action_quizFragment_to_navigation_dashboard)
                 }
             }
         }

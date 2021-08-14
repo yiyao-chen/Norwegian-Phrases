@@ -4,13 +4,14 @@ import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -18,8 +19,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.norwegianphrases.ActivityViewModel
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FillBlanksFragmentBinding
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class FillBlanksFragment : Fragment() {
@@ -35,8 +34,6 @@ class FillBlanksFragment : Fragment() {
     var currentPos: Int = 0 // counter for quiz-position in quizList
 
     lateinit var answer: String
-    var testPhrase: String = "Å holde tunga rett i munn"
-    //lateinit var tvContent: TextView
 
     lateinit var firstPart: TextView
     lateinit var blankPart: EditText
@@ -79,11 +76,56 @@ class FillBlanksFragment : Fragment() {
         noExplanation = binding!!.noExplanation
 
         setQuiz()
-
-        binding!!.layoutFillInBlank.setOnTouchListener { v, event ->
+/*
+        binding!!.fillblankScrollview.setOnTouchListener { v, event ->
+            println("scrollview touched")
             hideKeyBoard()
             true
         }
+        binding!!.fillblankScrollview.setOnClickListener {
+            println("scrollview clicked")
+        }
+
+
+ */
+
+        // when user has keyboard on, click outside should hide the keyboard
+        binding!!.layoutFillInBlank.setOnTouchListener { v, event ->
+            println("linearlayout touched")
+            hideKeyBoard()
+            true
+        }
+        binding!!.layoutFillInBlank.setOnClickListener {
+            println("ll clicked")
+        }
+
+        binding!!.summary.setOnTouchListener { v, event ->
+            println("s touched")
+            hideKeyBoard()
+            true
+        }
+
+
+
+/*
+        blankPart.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
+                // If the event is a key-down event on the "enter" button
+                if (event.getAction() === KeyEvent.ACTION_DOWN &&
+                    keyCode == KeyEvent.KEYCODE_ENTER
+                ) {
+                    // Perform action on key press
+                        println("enter")
+                    return true
+                }
+                return false
+            }
+        })
+
+
+ */
+
+
     }
 
     // set views back when user chooses to do quiz again after finishing a set of quizes
@@ -140,15 +182,18 @@ class FillBlanksFragment : Fragment() {
         }
     }
 
-    fun initCheckButton() {
+    private fun initCheckButton() {
         binding!!.check.setOnClickListener() {
             val input = blankPart.text.toString()
             hideKeyBoard()
 
             if(input.trim().lowercase() == answer.lowercase()) { // show next-btn if answer is correct
                 println(" ..." + true)
+                Toast.makeText(activity, "回答正确", Toast.LENGTH_SHORT).show()
+
                 binding!!.btnNextFillBlank.setVisibility(View.VISIBLE)
             } else {
+                Toast.makeText(activity, "回答错误", Toast.LENGTH_SHORT).show()
                 println(" ..." + false)
             }
 
@@ -190,10 +235,18 @@ class FillBlanksFragment : Fragment() {
                 chTranslation.setVisibility(View.GONE)
                 noExplanation.setVisibility(View.GONE)
 
-                binding!!.check.text = "再来几题"
+                binding!!.check.setVisibility(View.GONE)
+                binding!!.check.isClickable = false
                 binding!!.btnNextFillBlank.text = "退出"
+
+                var sum = ""
+                for(p in quizList) {
+                    sum+= p.phrase + "\n"
+                }
+                binding!!.summary.text = sum
+
             } else if (currentPos > quizList.size) { // when user clicks "tui chu"
-                findNavController().navigate(com.example.norwegianphrases.R.id.action_fillBlanksFragment_to_navigation_home)
+                findNavController().navigate(com.example.norwegianphrases.R.id.action_fillBlanksFragment_to_navigation_dashboard)
             }
 
         }
@@ -201,6 +254,8 @@ class FillBlanksFragment : Fragment() {
 
     // display quiz
     fun setQuiz() {
+        blankPart.text.clear()
+
         val array = quizList[currentPos].phrase?.split(" ")    // phrase in str-array format
 
         println("set quiz : " +  array.toString())

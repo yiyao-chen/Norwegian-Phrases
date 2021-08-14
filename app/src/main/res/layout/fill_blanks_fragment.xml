@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:clickable="true"
         android:focusable="true"
-        android:layout_margin="20dp"
+        android:padding="20dp"
         android:focusableInTouchMode="true"
         android:id="@+id/layout_fill_in_blank"
         tools:context=".ui.quiz.FillBlanksFragment"
         >
 
         <TextView
+            android:id="@+id/summary"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="10sp"
+            android:layout_height="10dp"
+            android:textSize="22sp"
             android:layout_margin="2dp"
             />
 
@@ -59,7 +56,7 @@
         <TextView
             android:id="@+id/test"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="10sp"
             android:layout_margin="2dp"
             />
@@ -90,7 +87,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="10sp"
             android:layout_margin="2dp"
             />
@@ -125,7 +122,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:gravity="center"
             android:layout_margin="20dp">
             <Button
@@ -144,5 +141,4 @@
         </LinearLayout>
 
 
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>
