@@ -9,6 +9,7 @@
     android:layout_margin="10dp"
     tools:context=".ui.dashboard.DashboardFragment">
 
+
     <TextView
         android:id="@+id/header_quizfragment"
         android:layout_width="match_parent"
@@ -17,15 +18,6 @@
         android:textAlignment="center"
         android:textSize="22sp"
         tools:text="做几道测验题吧"/>
-
-    <TextView
-        android:id="@+id/text_choose_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textAlignment="center"
-        android:textSize="22sp"
-        tools:text="选择题目类型"/>
 
     <Button
         android:id="@+id/btn_multiple_choice"
@@ -39,6 +31,7 @@
         >
     </Button>
 
+    <!--
     <Button
         android:id="@+id/btn_fill_in_blanks"
         android:layout_width="wrap_content"
@@ -49,6 +42,7 @@
 
         >
 
-    </Button>
 
+    </Button>
+    -->
 </LinearLayout>

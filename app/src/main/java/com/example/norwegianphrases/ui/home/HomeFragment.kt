@@ -103,6 +103,10 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
 
         })
 
+
+
+
+
         // show all phrases when user clicks close
         searchView.setOnCloseListener {
             println("closessss")
@@ -110,6 +114,8 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
             false
         }
     }
+
+
 
     override fun onPause() {
         super.onPause()

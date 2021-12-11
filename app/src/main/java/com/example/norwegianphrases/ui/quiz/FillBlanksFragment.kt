@@ -20,7 +20,7 @@ import com.example.norwegianphrases.ActivityViewModel
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.FillBlanksFragmentBinding
 
-
+// not used
 class FillBlanksFragment : Fragment() {
 
     private val activityViewModel: ActivityViewModel by activityViewModels()

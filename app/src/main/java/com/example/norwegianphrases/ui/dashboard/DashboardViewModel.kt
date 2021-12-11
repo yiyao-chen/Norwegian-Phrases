@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class DashboardViewModel : ViewModel() {
 
     private val _instruction = MutableLiveData<String>().apply {
-        value = "选择题目类型"
+        value = "zuo ti"
     }
 
     val instruction: LiveData<String> = _instruction

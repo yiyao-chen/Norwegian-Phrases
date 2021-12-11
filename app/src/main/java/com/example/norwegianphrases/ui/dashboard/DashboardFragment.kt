@@ -44,14 +44,13 @@ class DashboardFragment : Fragment() {
     }
 
     private fun initViews() {
-        val textView: TextView = binding.textChooseType
+        val textView: TextView = binding.headerQuizfragment
         dashboardViewModel.instruction.observe(viewLifecycleOwner, {
             textView.text = it
         })
 
-        binding.headerQuizfragment.text = "做几道测验题吧"
-        binding.btnMultipleChoice.text = "选择题"
-        binding.btnFillInBlanks.text = "填空题"
+        binding.btnMultipleChoice.text = "开始做题"
+        //binding.btnFillInBlanks.text = "填空题"
 
     }
 
@@ -63,11 +62,14 @@ class DashboardFragment : Fragment() {
 
         }
 
+        /*
         // quiz type 2: fill in blanks
         val buttonFillBlanks: Button = binding.btnFillInBlanks
         buttonFillBlanks.setOnClickListener() {
             findNavController().navigate(R.id.action_navigation_dashboard_to_fillBlanksFragment)
         }
+
+        */
     }
     override fun onDestroyView() {
         super.onDestroyView()
