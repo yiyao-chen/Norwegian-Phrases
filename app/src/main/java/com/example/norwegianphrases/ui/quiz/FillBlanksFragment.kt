@@ -246,7 +246,7 @@ class FillBlanksFragment : Fragment() {
                 binding!!.summary.text = sum
 
             } else if (currentPos > quizList.size) { // when user clicks "tui chu"
-                findNavController().navigate(com.example.norwegianphrases.R.id.action_fillBlanksFragment_to_navigation_dashboard)
+                //findNavController().navigate(com.example.norwegianphrases.R.id.action_fillBlanksFragment_to_navigation_dashboard)
             }
 
         }

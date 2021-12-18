@@ -23,9 +23,6 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_quizFragment"
             app:destination="@id/quizFragment" />
-        <action
-            android:id="@+id/action_navigation_dashboard_to_fillBlanksFragment"
-            app:destination="@id/fillBlanksFragment" />
     </fragment>
 
     <fragment
@@ -44,18 +41,6 @@
         android:label=" ">
         <action
             android:id="@+id/action_quizFragment_to_navigation_dashboard"
-            app:destination="@id/navigation_dashboard" />
-    </fragment>
-    <fragment
-        android:id="@+id/fillBlanksFragment"
-        android:name="com.example.norwegianphrases.ui.quiz.FillBlanksFragment"
-        android:label=" "
-        tools:layout="@layout/fill_blanks_fragment">
-        <action
-            android:id="@+id/action_fillBlanksFragment_to_navigation_home"
-            app:destination="@id/navigation_home" />
-        <action
-            android:id="@+id/action_fillBlanksFragment_to_navigation_dashboard"
             app:destination="@id/navigation_dashboard" />
     </fragment>
 </navigation>
