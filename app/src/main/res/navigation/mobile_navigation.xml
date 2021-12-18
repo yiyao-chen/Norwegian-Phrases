@@ -36,12 +36,12 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.norwegianphrases.ui.detail.DetailFragment"
-        android:label="fragment_detail"
+        android:label=" "
         tools:layout="@layout/fragment_detail" />
     <fragment
         android:id="@+id/quizFragment"
         android:name="com.example.norwegianphrases.ui.quiz.QuizFragment"
-        android:label="quiz_fragment" >
+        android:label=" ">
         <action
             android:id="@+id/action_quizFragment_to_navigation_dashboard"
             app:destination="@id/navigation_dashboard" />
@@ -49,8 +49,8 @@
     <fragment
         android:id="@+id/fillBlanksFragment"
         android:name="com.example.norwegianphrases.ui.quiz.FillBlanksFragment"
-        android:label="fill_blanks_fragment"
-        tools:layout="@layout/fill_blanks_fragment" >
+        android:label=" "
+        tools:layout="@layout/fill_blanks_fragment">
         <action
             android:id="@+id/action_fillBlanksFragment_to_navigation_home"
             app:destination="@id/navigation_home" />

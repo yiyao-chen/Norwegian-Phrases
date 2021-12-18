@@ -49,7 +49,7 @@ class DashboardFragment : Fragment() {
             textView.text = it
         })
 
-        binding.btnMultipleChoice.text = "开始做题"
+        binding.btnMultipleChoice.text = "开始"
         //binding.btnFillInBlanks.text = "填空题"
 
     }
