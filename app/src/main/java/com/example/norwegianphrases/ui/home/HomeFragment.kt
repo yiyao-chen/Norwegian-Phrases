@@ -18,38 +18,26 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
 {
-    //private lateinit var homeViewModel: HomeViewModel
     private val viewModel : ActivityViewModel by activityViewModels()
 
     private var _binding: FragmentHomeBinding? = null
     private lateinit var mAdapter: PhraseAdapter
-   // private var db: AppDatabase? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        println("-------------HomeFragment oncreate")
-
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        println("--------HomeFragment onCreateView")
-
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("-----------HomeFragment onViewCreated")
 
         mAdapter = PhraseAdapter(this)
 
@@ -65,9 +53,6 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
 
         // observe livedata in viewmodel and update adapter
         viewModel.getPhraseLive().observe(viewLifecycleOwner, { dataList->
-            println("ViewModel.observe----")
-            //textView.text = t
-
             mAdapter.updateAdapter(dataList)
             mAdapter.notifyDataSetChanged()
         })
@@ -78,15 +63,12 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
 
     private fun searchFilter() {
         val searchView = search_bar
-      //  searchView.imeOptions = EditorInfo.IME_ACTION_DONE
 
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String?): Boolean {
                 println("submitted -----")
                 mAdapter.updateAdapter(mAdapter.phrases)
                 searchView.setQuery("", false)
-                //search_bar.clearFocus()
-                //search_bar.setFocusable(false)
                 search_bar.isIconified = true
                 return false
             }
@@ -94,17 +76,12 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
                 if (input != null) {
                     if(input.isNotEmpty()) {
                         mAdapter.filter.filter(input)
-                        println("filtered : " + input)
                     }
                 }
                 return false
             }
 
-
         })
-
-
-
 
 
         // show all phrases when user clicks close
@@ -119,17 +96,13 @@ class HomeFragment : Fragment(), PhraseAdapter.OnItemClickListener
 
     override fun onPause() {
         super.onPause()
-        println("------------HomeFragment on pause")
         search_bar.setQuery("", false)
         search_bar.isIconified = true
     }
 
     override fun onDestroyView() {
-        println("------------HomeF.onDestroyView")
         super.onDestroyView()
         _binding = null
-        //search_bar.clearFocus()
-        //activity?.let { println("?????"+it.isDestroyed) }
     }
 
 

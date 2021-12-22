@@ -54,9 +54,6 @@ class PhraseAdapter(
 
         holder.name.text = current.phrase
         holder.translation.text = current.chTrans
-        //holder.no_explanation.text = current.no_explanation
-        //holder.ch_explanation.text = current.ch_explanation
-
     }
 
     override fun getItemCount() = phrases.size
@@ -78,8 +75,6 @@ class PhraseAdapter(
         // filter data according to the constraint and return result
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val filteredList: MutableList<Phrase> = ArrayList()
-
-            val constraintList: MutableList<String> = ArrayList()
 
             // if search field is empty, use the original list, else use filtered list
             if(constraint == null || constraint.isEmpty()) {

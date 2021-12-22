@@ -1,6 +1,5 @@
 package com.example.norwegianphrases.ui.quiz
 
-import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,14 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.norwegianphrases.ActivityViewModel
 import com.example.norwegianphrases.R
 import com.example.norwegianphrases.database.Phrase
 import com.example.norwegianphrases.databinding.QuizFragmentBinding
-import com.example.norwegianphrases.ui.notifications.NotificationsViewModel
 import kotlinx.android.synthetic.main.quiz_fragment.*
 
 class QuizFragment : Fragment(), View.OnClickListener {

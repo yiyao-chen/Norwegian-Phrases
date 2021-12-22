@@ -50,7 +50,6 @@ class DashboardFragment : Fragment() {
         })
 
         binding.btnMultipleChoice.text = "开始"
-        //binding.btnFillInBlanks.text = "填空题"
 
     }
 
@@ -62,14 +61,6 @@ class DashboardFragment : Fragment() {
 
         }
 
-        /*
-        // quiz type 2: fill in blanks
-        val buttonFillBlanks: Button = binding.btnFillInBlanks
-        buttonFillBlanks.setOnClickListener() {
-            findNavController().navigate(R.id.action_navigation_dashboard_to_fillBlanksFragment)
-        }
-
-        */
     }
     override fun onDestroyView() {
         super.onDestroyView()

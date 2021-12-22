@@ -25,7 +25,6 @@ class ActivityViewModel(application : Application) : AndroidViewModel(applicatio
 
      fun readFromDatabase() {
         val myRef = database.getReference("phrases")
-         println("read from database")
          phrasesFull.clear()
 
          // Read from the database
@@ -37,11 +36,6 @@ class ActivityViewModel(application : Application) : AndroidViewModel(applicatio
                 for(e in snapshot.children) {
                     val p = e.getValue(Phrase::class.java)
                     phrasesFull.add(p!!)
-                    println("--------size--------------- " + phrasesFull.size)
-                }
-
-                for(p in phrasesFull) {
-                    println("......mmmmmmmmmm. " + p.toString())
                 }
 
                 notifyListLiveData(phrasesFull)
@@ -67,7 +61,6 @@ class ActivityViewModel(application : Application) : AndroidViewModel(applicatio
 
     private fun notifyLiveData(phrase: Phrase) {
         phraseLive.value = phrase
-        println("notified : phrase = " + phrase.toString())
     }
 
     fun clickedPhraseLiveData() = phraseLive as LiveData<Phrase>

@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        println("-------------MainA oncreate")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -48,26 +47,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-/*
-        // hide navigation bar in some fragments
-        supportFragmentManager.registerFragmentLifecycleCallbacks(object : FragmentManager.FragmentLifecycleCallbacks() {
-            override fun onFragmentViewCreated(fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?) {
-                TransitionManager.beginDelayedTransition(binding.root, Slide(Gravity.BOTTOM).excludeTarget(R.id.nav_host_fragment_activity_main, true))
-                when (f) {
-                    is QuizFragment -> {
-                        binding.navView.visibility = View.GONE
-                    }
-                    else -> {
-                        binding.navView.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }, true)
-
- */
-
-
 
     }
 
